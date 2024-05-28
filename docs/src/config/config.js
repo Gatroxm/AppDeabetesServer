@@ -1,1 +1,0 @@
-module.exports.SEED = '@este-es@-#el-$$seed-@@de-_-Q@@desarrollo';
