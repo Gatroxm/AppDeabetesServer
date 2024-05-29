@@ -3,44 +3,29 @@ const Usuario = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 
 const getUsers = (req, res = response) => {
-    try {
-        const desde = req.query.desde || 0;
-        desde = Number(desde);
-        Usuario.find({}, 'id nombre email img role')
-            .skip(desde)
-            .limit(5)
-            .exec((err, usuariosdb) => {
-                if (err) {
-                    return res.status(500).json({
-                        ok: false,
-                        mensaje: 'Error al cargar los usuarios',
-                        errors: err
-                    });
-                }
-                Usuario.count({}, (err, conteo) => {
-                    if (err) {
-                        return res.status(500).json({
-                            ok: false,
-                            mensaje: 'Error al contar los usuarios',
-                            errors: err
-                        });
-                    }
+    Usuario.find({}, 'id nombre email img role')
+        .then(usuariosdb => {
+            return Usuario.countDocuments({})
+                .then(conteo => {
                     res.status(200).json({
                         ok: true,
                         total: conteo,
                         usuarios: usuariosdb
                     });
                 });
+        })
+        .catch(err => {
+            res.status(500).json({
+                ok: false,
+                mensaje: 'Error al cargar los usuarios o contar los usuarios',
+                errors: err
             });
-    } catch (error) {
-        return res.status(500).json({
-            ok: false,
-            errors: error
         });
-    }
+
+
 }
 
-const getByIdUser = (req,res =response) => {
+const getByIdUser = (req, res = response) => {
     var id = req.params.id;
     var body = req.body;
     Usuario.findById(id, (err, usuario) => {
@@ -91,22 +76,22 @@ const postUsers = (req, res = response) => {
             img: body.img
         });
         usuario.save()
-        .then(usuarioDB => {
-            // Si se guarda correctamente, devuelve la muestra guardada en formato JSON
-            res.status(201).json({
-                ok: true,
-                usuario: usuarioDB,
-                usuariotoken: req.usuario
+            .then(usuarioDB => {
+                // Si se guarda correctamente, devuelve la muestra guardada en formato JSON
+                res.status(201).json({
+                    ok: true,
+                    usuario: usuarioDB,
+                    usuariotoken: req.usuario
+                });
+            })
+            .catch(err => {
+                // Si ocurre un error, devuelve un mensaje de error en formato JSON
+                return res.status(401).json({
+                    ok: false,
+                    mensaje: 'error a crear usuario',
+                    errors: err
+                });
             });
-        })
-        .catch(err => {
-            // Si ocurre un error, devuelve un mensaje de error en formato JSON
-            return res.status(401).json({
-                ok: false,
-                mensaje: 'error a crear usuario',
-                errors: err
-            });
-        });
     } catch (error) {
         return res.status(500).json({
             ok: false,
@@ -115,8 +100,36 @@ const postUsers = (req, res = response) => {
     }
 }
 
+const getUser = (req, res = response) => {
+    const id = req.params.id;  // Asegúrate de obtener el ID desde los parámetros de la solicitud
+
+    Usuario.findById(id)
+        .then(usuario => {
+            if (!usuario) {
+                return res.status(404).json({
+                    ok: false,
+                    mensaje: 'Usuario no encontrado',
+                    errors: { message: 'No existe un usuario con ese ID' }
+                });
+            }
+            res.status(200).json({
+                ok: true,
+                usuario
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                ok: false,
+                mensaje: 'Error al buscar el usuario',
+                errors: err
+            });
+        });
+    
+}
+
 module.exports = {
     getUsers,
     postUsers,
-    getByIdUser
+    getByIdUser,
+    getUser
 }

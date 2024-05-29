@@ -31,7 +31,7 @@ app.use((req, res, next) => {
     next();
 });
 //Conección a la base de datos
-const uri = 'mongodb+srv://user_app_diabetes:snPDBEheJe86kw4t@appdeavetes.urxfdpx.mongodb.net/';
+const uri = 'mongodb+srv://user_app_diabetes:snPDBEheJe86kw4t@appdeavetes.urxfdpx.mongodb.net/AppDeavetes';
 
 app.use(express.static(path.join(__dirname, 'public')));
 const options = {
@@ -48,9 +48,9 @@ const options = {
 
 //Rutas 
 
-app.use('api/sampling', SamplingRouter);
-app.use('api/user', UserRouter);
-app.use('api/login', LogInRouter);
+app.use('/api/sampling', SamplingRouter);
+app.use('/api/user', UserRouter);
+app.use('/api/login', LogInRouter);
 
 //Iniciando el servidor
 app.listen(3000, () => {

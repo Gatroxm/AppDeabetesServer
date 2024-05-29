@@ -2,7 +2,7 @@ const express = require('express');
 
 
 
-const { getUsers, getByIdUser, postUsers } = require('../controller/user.controller');
+const { getUsers, getByIdUser, postUsers, getUser } = require('../controller/user.controller');
 
 const app = express();
 
@@ -18,6 +18,7 @@ app.post('/',  postUsers);
 
 app.put('/:id',  getByIdUser);
 
+app.get('/:id', getUser)
 /* Borrar usuarios */
 
 // app.delete('/:id', verificaToken, (req, res) => {
