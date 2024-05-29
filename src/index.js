@@ -9,6 +9,7 @@ const path = require('path');
 const SamplingRouter = require('./routes/sampling.routes');
 const UserRouter = require('./routes/user.routes');
 const LogInRouter = require('./routes/login.routes');
+const NewsRouter = require('./routes/new.routes');
 // inicializar variables
 const app = express();
 
@@ -51,6 +52,7 @@ const options = {
 app.use('/api/sampling', SamplingRouter);
 app.use('/api/user', UserRouter);
 app.use('/api/login', LogInRouter);
+app.use('/api/new', NewsRouter);
 
 //Iniciando el servidor
 app.listen(3000, () => {
