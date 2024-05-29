@@ -48,9 +48,9 @@ const options = {
 
 //Rutas 
 
-app.use('/sampling', SamplingRouter);
-app.use('/user', UserRouter);
-app.use('/login', LogInRouter);
+app.use('api/sampling', SamplingRouter);
+app.use('api/user', UserRouter);
+app.use('api/login', LogInRouter);
 
 //Iniciando el servidor
 app.listen(3000, () => {
