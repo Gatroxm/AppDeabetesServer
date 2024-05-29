@@ -24,13 +24,15 @@ app.use(bodyParser.json())
 //Cros
 app.use(cors());
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://gatroxm.github.io/AppDeabetesServer');
+    res.setHeader('Access-Control-Allow-Origin', 'https://appdeabetesserver.onrender.com/');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
 });
 //Conección a la base de datos
-const uri = 'mongodb://localhost:27017/control';
+const uri = 'mongodb+srv://user_app_diabetes:snPDBEheJe86kw4t@appdeavetes.urxfdpx.mongodb.net/';
+
+app.use(express.static(path.join(__dirname, 'public')));
 const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true
