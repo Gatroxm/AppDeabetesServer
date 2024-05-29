@@ -4,12 +4,14 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
-
+const fileUpload = require('express-fileupload');
 //Importación de rutas 
 const SamplingRouter = require('./routes/sampling.routes');
 const UserRouter = require('./routes/user.routes');
 const LogInRouter = require('./routes/login.routes');
 const NewsRouter = require('./routes/new.routes');
+const UploadRouter = require('./routes/upload.routes');
+const ImagesRouter = require('./routes/images.routes');
 // inicializar variables
 const app = express();
 
@@ -19,6 +21,7 @@ app.set('json spaces', 2)
 
 //Middleware
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(fileUpload());
 
 // parse application/json
 app.use(bodyParser.json())
@@ -53,6 +56,8 @@ app.use('/api/sampling', SamplingRouter);
 app.use('/api/user', UserRouter);
 app.use('/api/login', LogInRouter);
 app.use('/api/new', NewsRouter);
+app.use('/api/upload', UploadRouter);
+app.use('/api/images', ImagesRouter);
 
 //Iniciando el servidor
 app.listen(3000, () => {
