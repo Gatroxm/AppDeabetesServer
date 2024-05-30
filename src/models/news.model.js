@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const newsSchema = new Schema({
     title: { type: String, required: true },
     content: { type: String, required: true },
+    exerpt: { type: String, default :'' },
     author: { type: String, required: true },
     date: { type: Date, default: Date.now }
 }, { collection: 'news' });

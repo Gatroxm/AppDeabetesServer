@@ -34,7 +34,7 @@ const getNewById = async (req, res = response) => {
         }
         res.status(200).json({
             ok: true,
-            news: newsItem
+            new: newsItem
         });
     } catch (err) {
         res.status(500).json({
@@ -47,10 +47,16 @@ const getNewById = async (req, res = response) => {
 
 // Crear una nueva noticia
 const postNew = async (req, res = response) => {
-    const body = req.body;
+    const {title,
+        content,
+        exerpt,
+        author} = req.body;
 
     try {
-        const newNews = new News(body);
+        const newNews = new News({title,
+            content,
+            exerpt,
+            author});
         const newsSaved = await newNews.save();
         res.status(201).json({
             ok: true,

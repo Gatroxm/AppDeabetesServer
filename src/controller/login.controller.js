@@ -10,7 +10,6 @@ const logIng = (req, res  = response) => {
         const body = req.body;
         Usuario.findOne({ email: body.email })
             .then(usuarioDB => {
-                console.log(usuarioDB)
                 if (!usuarioDB) {
                     return res.status(400).json({
                         ok: false,

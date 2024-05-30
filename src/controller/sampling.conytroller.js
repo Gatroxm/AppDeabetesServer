@@ -70,7 +70,6 @@ const postSampling = (req, res = response) => {
     try {
         // Extrae los datos del cuerpo de la solicitud
         const { id, muestra, fecha, hora, descripcon, jornada, user } = req.body;
-        console.log({ id, muestra, fecha, hora, descripcon, jornada, user })
         // Crea una nueva instancia de Sampling utilizando el modelo
         const newSampling = new Sampling({
             id,
