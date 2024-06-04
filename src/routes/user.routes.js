@@ -2,7 +2,7 @@ const express = require('express');
 
 
 
-const { getUsers, getByIdUser, postUsers, getUser } = require('../controller/user.controller');
+const { getUsers, getByIdUser, postUsers, getUser, putUser } = require('../controller/user.controller');
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.post('/',  postUsers);
 
 /* Actualizar usuarios */
 
-app.put('/:id',  getByIdUser);
+app.put('/:id',  putUser);
 
 app.get('/:id', getUser)
 /* Borrar usuarios */

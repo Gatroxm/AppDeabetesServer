@@ -26,6 +26,7 @@ const logIng = (req, res  = response) => {
                 }
                 //crear un token
                 usuarioDB.password = ':)';
+                console.log({ usuario: usuarioDB })
                 const token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: 14400 });
                 res.status(200).json({
                     ok: true,

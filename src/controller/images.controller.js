@@ -11,9 +11,7 @@ const getImages = (req, res = response) =>{
 
     if (fs.existsSync(pathImagen)) {
         res.sendFile(pathImagen);
-    } else {
-        res.sendFile(pathNoImagen);
-    }
+    } 
 };
 
 module.exports = {

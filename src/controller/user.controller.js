@@ -3,7 +3,7 @@ const Usuario = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 
 const getUsers = (req, res = response) => {
-    Usuario.find({}, 'id nombre email img role')
+    Usuario.find({}, 'id name email img role')
         .then(usuariosdb => {
             return Usuario.countDocuments({})
                 .then(conteo => {
@@ -44,7 +44,7 @@ const getByIdUser = (req, res = response) => {
             });
         }
 
-        usuario.nombre = body.nombre;
+        usuario.name = body.name;
         usuario.email = body.email;
         usuario.role = body.role;
 
@@ -69,7 +69,7 @@ const postUsers = (req, res = response) => {
     try {
         const body = req.body;
         const usuario = new Usuario({
-            nombre: body.nombre,
+            name: body.name,
             email: body.email,
             password: bcrypt.hashSync(body.password, 10),
             role: body.role,
@@ -100,6 +100,53 @@ const postUsers = (req, res = response) => {
     }
 }
 
+const putUser = (req, res) => {
+    var id = req.params.id;
+    var body = req.body;
+    
+    Usuario.findById(id)
+        .then(usuario => {
+            if (!usuario) {
+                return res.status(404).json({
+                    ok: false,
+                    mensaje: 'Usuario no encontrado',
+                    errors: { message: 'No existe un usuario con ese ID' }
+                });
+            }
+            
+            // Actualiza las propiedades del usuario con los datos del body
+            usuario.name = body.name;
+            usuario.role = body.role;
+            usuario.email = body.email;
+            if(body.password !== ''){
+                usuario.password = bcrypt.hashSync(body.password, 10);
+            }
+            
+            // Guarda los cambios en la base de datos
+            usuario.save()
+                .then(usuarioSaved => {
+                    return res.status(201).json({
+                        ok: true,
+                        mensaje: 'Usuario Actualizado',
+                        usuario: usuarioSaved
+                    });
+                })
+                .catch(err => {
+                    return res.status(500).json({
+                        ok: false,
+                        mensaje: 'Error al editar el usuario',
+                        errors: err
+                    });
+                });
+        })
+        .catch(err => {
+            res.status(500).json({
+                ok: false,
+                mensaje: 'Error al buscar el usuario',
+                errors: err
+            });
+        });
+}
 const getUser = (req, res = response) => {
     const id = req.params.id;  // Asegúrate de obtener el ID desde los parámetros de la solicitud
 
@@ -131,5 +178,6 @@ module.exports = {
     getUsers,
     postUsers,
     getByIdUser,
-    getUser
+    getUser,
+    putUser
 }
