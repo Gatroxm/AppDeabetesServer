@@ -12,6 +12,7 @@ const LogInRouter = require('./routes/login.routes');
 const NewsRouter = require('./routes/new.routes');
 const UploadRouter = require('./routes/upload.routes');
 const ImagesRouter = require('./routes/images.routes');
+const QuizRouter = require('./routes/quiz.routes');
 // inicializar variables
 const app = express();
 
@@ -59,6 +60,7 @@ app.use('/api/login', LogInRouter);
 app.use('/api/new', NewsRouter);
 app.use('/api/upload', UploadRouter);
 app.use('/api/images', ImagesRouter);
+app.use('/api/quiz', QuizRouter);
 
 //Iniciando el servidor
 app.listen(3000, () => {

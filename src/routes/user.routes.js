@@ -1,14 +1,16 @@
 const express = require('express');
 
-
-
-const { getUsers, getByIdUser, postUsers, getUser, putUser } = require('../controller/user.controller');
+const { 
+    getUsers,
+    postUsers,
+    getUser, 
+    putUser 
+} = require('../controller/user.controller');
 
 const app = express();
 
 /* Obteneter los usuarios */
 app.get('/', getUsers);
-
 
 /* Crear nuevo usuario */
 
@@ -18,7 +20,10 @@ app.post('/',  postUsers);
 
 app.put('/:id',  putUser);
 
+/* Obtener un usuario */
 app.get('/:id', getUser)
+
+
 /* Borrar usuarios */
 
 // app.delete('/:id', verificaToken, (req, res) => {

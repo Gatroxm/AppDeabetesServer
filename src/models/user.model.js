@@ -25,9 +25,23 @@ const userSchema = new Schema({
         required: false,
         default: ''
     },
+    sexo: {
+        type: String,
+        required: false,
+        default: ''
+    },
+    telefono: {
+        type: String,
+        required: false,
+        default: ''
+    },
+    peso: {
+        type: String,
+        required: false,
+        default: ''
+    },
     role: {
         type: String,
-        required: true,
         default: 'USER_ROLE',
         enum: userRoles
     }

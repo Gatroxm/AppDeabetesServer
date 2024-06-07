@@ -3,7 +3,7 @@ const Usuario = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 
 const getUsers = (req, res = response) => {
-    Usuario.find({}, 'id name email img role')
+    Usuario.find({}, 'id name email img role sexo telefono peso')
         .then(usuariosdb => {
             return Usuario.countDocuments({})
                 .then(conteo => {
@@ -25,45 +25,6 @@ const getUsers = (req, res = response) => {
 
 }
 
-const getByIdUser = (req, res = response) => {
-    var id = req.params.id;
-    var body = req.body;
-    Usuario.findById(id, (err, usuario) => {
-        if (err) {
-            return res.status(500).json({
-                ok: false,
-                mensaje: 'Error al buscar el usuarios',
-                errors: err
-            });
-        }
-        if (!usuario) {
-            return res.status(400).json({
-                ok: false,
-                mensaje: 'El usuario con el id: ' + id + ' no existe',
-                errors: { mensage: 'No existe un usuario con ese ID' }
-            });
-        }
-
-        usuario.name = body.name;
-        usuario.email = body.email;
-        usuario.role = body.role;
-
-        usuario.save((err, usuarioGuardado) => {
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    mensaje: 'Error al actualizar el usuarios',
-                    errors: err
-                });
-            }
-            usuarioGuardado.password = ':)';
-            res.status(200).json({
-                ok: true,
-                usuario: usuarioGuardado
-            });
-        });
-    });
-}
 
 const postUsers = (req, res = response) => {
     try {
@@ -100,53 +61,47 @@ const postUsers = (req, res = response) => {
     }
 }
 
-const putUser = (req, res) => {
-    var id = req.params.id;
-    var body = req.body;
-    
-    Usuario.findById(id)
-        .then(usuario => {
-            if (!usuario) {
-                return res.status(404).json({
-                    ok: false,
-                    mensaje: 'Usuario no encontrado',
-                    errors: { message: 'No existe un usuario con ese ID' }
-                });
-            }
-            
-            // Actualiza las propiedades del usuario con los datos del body
-            usuario.name = body.name;
-            usuario.role = body.role;
-            usuario.email = body.email;
-            if(body.password !== ''){
-                usuario.password = bcrypt.hashSync(body.password, 10);
-            }
-            
-            // Guarda los cambios en la base de datos
-            usuario.save()
-                .then(usuarioSaved => {
-                    return res.status(201).json({
-                        ok: true,
-                        mensaje: 'Usuario Actualizado',
-                        usuario: usuarioSaved
-                    });
-                })
-                .catch(err => {
-                    return res.status(500).json({
-                        ok: false,
-                        mensaje: 'Error al editar el usuario',
-                        errors: err
-                    });
-                });
-        })
-        .catch(err => {
-            res.status(500).json({
+const putUser = async (req, res) => {
+    const id = req.params.id;
+    const body = req.body;
+    console.log(body);
+
+    try {
+        let usuario = await Usuario.findById(id);
+        if (!usuario) {
+            return res.status(404).json({
                 ok: false,
-                mensaje: 'Error al buscar el usuario',
-                errors: err
+                mensaje: 'Usuario no encontrado',
+                errors: { message: 'No existe un usuario con ese ID' }
             });
+        }
+
+        // Actualiza las propiedades del usuario con los datos del body
+        if(usuario.email != ''){ usuario.email = body.email; }
+        if(usuario.role != ''){ usuario.role = body.role; }
+        if(usuario.name != ''){ usuario.name = body.name; }
+        if(usuario.sexo != ''){ usuario.sexo = body.sexo; }
+        if(usuario.telefono != ''){ usuario.telefono = body.telefono; }
+        if(usuario.peso != ''){ usuario.peso = body.peso; }
+        if (body.password && body.password !== '') {
+            usuario.password = bcrypt.hashSync(body.password, 10);
+        }
+
+        // Guarda los cambios en la base de datos
+        const usuarioSaved = await usuario.save();
+        res.status(200).json({
+            ok: true,
+            mensaje: 'Usuario Actualizado',
+            usuario: usuarioSaved
         });
-}
+    } catch (err) {
+        res.status(500).json({
+            ok: false,
+            mensaje: 'Error al editar el usuario',
+            errors: err
+        });
+    }
+};
 const getUser = (req, res = response) => {
     const id = req.params.id;  // Asegúrate de obtener el ID desde los parámetros de la solicitud
 
@@ -177,7 +132,6 @@ const getUser = (req, res = response) => {
 module.exports = {
     getUsers,
     postUsers,
-    getByIdUser,
     getUser,
     putUser
 }

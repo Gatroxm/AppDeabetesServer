@@ -1,0 +1,1 @@
+import{P as r,f as e}from"./chunk-6LC4AVBM.js";var c=(()=>{let t=class t{constructor(){this._toastEvents=new e,this.toastEvents=this._toastEvents.asObservable()}dispatchToast(o){this._toastEvents.next(o)}};t.\u0275fac=function(a){return new(a||t)},t.\u0275prov=r({token:t,factory:t.\u0275fac,providedIn:"root"});let s=t;return s})();export{c as a};
